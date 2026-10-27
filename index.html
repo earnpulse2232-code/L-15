@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#f8fafc">
+    <title>Indian Polity - Parliament Part-3 (Lecture 15)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        :root {
+            --bg-main: #f8fafc; --bg-card: #ffffff; --primary: #2563eb; --primary-hover: #1d4ed8;
+            --primary-light: #eff6ff; --text-dark: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0;
+            --green: #10b981; --green-light: #ecfdf5; --red: #ef4444; --red-light: #fef2f2;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06); --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08);
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); color: var(--text-dark); min-height: 100dvh; font-size: 15px; line-height: 1.5; overflow-x: hidden; }
+        button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+        .hidden { display: none !important; }
+        .start-screen { position: fixed; inset: 0; background: var(--bg-main); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+        .start-card { width: 100%; max-width: 440px; background: var(--bg-card); border-radius: 24px; padding: 36px 28px; box-shadow: var(--shadow-lg); text-align: center; border: 1px solid var(--border-color); }
+        .brand-icon { width: 60px; height: 60px; background: var(--primary-light); color: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 16px; }
+        .start-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+        .start-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+        .mode-btn { display: flex; align-items: center; gap: 16px; width: 100%; padding: 16px; background: #fff; border: 1.5px solid var(--border-color); border-radius: 16px; text-align: left; margin-bottom: 12px; transition: all 0.2s ease; }
+        .mode-btn:hover { border-color: var(--primary); background: var(--primary-light); transform: translateY(-2px); }
+        .mode-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+        .mode-icon.quiz { background: #dbeafe; color: #2563eb; }
+        .mode-icon.test { background: #d1fae5; color: #059669; }
+        .mode-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+        .mode-info-txt { font-size: 12px; color: var(--text-muted); }
+        .quiz-app { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+        .quiz-header { flex-shrink: 0; background: #fff; border-bottom: 1px solid var(--border-color); padding: 12px 18px; }
+        .quiz-header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .hdr-brand { font-weight: 700; font-size: 15px; }
+        .hdr-timer { padding: 6px 14px; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 20px; font-family: monospace; font-weight: 700; color: var(--primary); }
+        .hdr-btn { width: 38px; height: 38px; border-radius: 10px; background: #fff; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; }
+        .quiz-main { flex: 1; overflow-y: auto; max-width: 900px; width: 100%; margin: 0 auto; padding: 24px 16px; }
+        .q-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; box-shadow: var(--shadow-sm); }
+        .q-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+        .q-num-badge { padding: 5px 12px; background: var(--primary-light); color: var(--primary); border-radius: 20px; font-size: 12px; font-weight: 700; }
+        .lang-btn { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border-color); font-size: 12px; font-weight: 600; background: #fff; display: inline-flex; align-items: center; gap: 6px; }
+        .q-text { font-size: 16px; font-weight: 600; line-height: 1.6; margin-bottom: 22px; white-space: pre-line; }
+        .opts { display: flex; flex-direction: column; gap: 11px; }
+        .opt { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: #fff; border: 1.5px solid var(--border-color); border-radius: 14px; cursor: pointer; transition: all 0.15s ease; }
+        .opt:hover:not(.locked) { border-color: var(--primary); background: #f8fafc; }
+        .opt.selected { border-color: var(--primary); background: var(--primary-light); }
+        .opt.correct { border-color: var(--green); background: var(--green-light); }
+        .opt.wrong { border-color: var(--red); background: var(--red-light); }
+        .opt.locked { cursor: default; }
+        .opt-letter { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: var(--text-muted); flex-shrink: 0; }
+        .opt.selected .opt-letter { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .opt.correct .opt-letter { background: var(--green); color: #fff; border-color: var(--green); }
+        .opt.wrong .opt-letter { background: var(--red); color: #fff; border-color: var(--red); }
+        .opt-text { flex: 1; font-weight: 600; }
+        .opt-tag { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+        .opt.correct .opt-tag { background: var(--green); color: #fff; }
+        .opt.wrong .opt-tag { background: var(--red); color: #fff; }
+        .sol-box { margin-top: 20px; padding: 16px; background: #f8fafc; border-left: 4px solid var(--primary); border-radius: 12px; }
+        .sol-head { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--primary); margin-bottom: 8px; }
+        .quiz-nav { flex-shrink: 0; background: #fff; border-top: 1px solid var(--border-color); padding: 12px 18px; }
+        .quiz-nav-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .nav-btn { display: flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; }
+        .nav-btn.prev { background: #fff; border: 1px solid var(--border-color); }
+        .nav-btn.prev:disabled { opacity: 0.4; cursor: not-allowed; }
+        .nav-btn.submit { background: var(--green-light); color: #065f46; border: 1px solid #a7f3d0; }
+        .nav-btn.next { background: var(--primary); color: #fff; }
+        .palette-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; display: none; }
+        .palette-overlay.open { display: block; }
+        .palette-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: min(340px, 85vw); background: #fff; z-index: 160; display: flex; flex-direction: column; transform: translateX(-100%); transition: transform 0.25s; }
+        .palette-drawer.open { transform: translateX(0); }
+        .pal-head { padding: 18px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; font-weight: 700; }
+        .pal-grid { flex: 1; overflow-y: auto; padding: 16px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; align-content: start; }
+        .pal-btn { aspect-ratio: 1; border-radius: 10px; border: 1px solid var(--border-color); background: #f8fafc; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+        .pal-btn.answered { background: var(--green); color: #fff; border-color: var(--green); }
+        .pal-btn.current { outline: 2px solid var(--primary); outline-offset: 2px; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 170; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.open { display: flex; }
+        .modal-box { width: 100%; max-width: 420px; background: #fff; border-radius: 20px; padding: 28px; text-align: center; }
+        .modal-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 22px; }
+        .modal-stat { background: #f8fafc; border-radius: 12px; padding: 14px; border: 1px solid var(--border-color); }
+        .modal-stat-num { font-size: 24px; font-weight: 800; }
+        .modal-btn { width: 100%; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+        .modal-btn.confirm { background: var(--primary); color: #fff; }
+        .modal-btn.cancel { background: #f1f5f9; }
+        .results-screen { position: fixed; inset: 0; background: var(--bg-main); z-index: 180; display: none; overflow-y: auto; padding: 30px 16px 60px; }
+        .results-screen.open { display: block; }
+        .results-box { max-width: 600px; margin: 0 auto; text-align: center; }
+        .res-score-card { background: #0f172a; color: #fff; border-radius: 20px; padding: 28px; margin: 20px 0; }
+        .res-score-val { font-size: 54px; font-weight: 800; }
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+        .res-item { background: #fff; border-radius: 14px; padding: 16px; border: 1px solid var(--border-color); }
+        .res-item-val { font-size: 22px; font-weight: 700; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: #0f172a; color: #fff; padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; z-index: 300; opacity: 0; transition: all 0.25s; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="start-screen" id="startScreen">
+        <div class="start-card">
+            <div class="brand-icon"><i class="fas fa-landmark"></i></div>
+            <h1 class="start-title">Parliament: Part-3</h1>
+            <p class="start-desc">Articles 79-122, Parliamentary Procedures, Budget, Bills & Privileges</p>
+            <button class="mode-btn" onclick="startApp('quiz')">
+                <div class="mode-icon quiz"><i class="fas fa-bolt"></i></div>
+                <div><div class="mode-name">Practice Mode</div><div class="mode-info-txt">Instant correct/wrong answers and detailed explanations.</div></div>
+            </button>
+            <button class="mode-btn" onclick="startApp('test')">
+                <div class="mode-icon test"><i class="fas fa-clock"></i></div>
+                <div><div class="mode-name">Exam Mode</div><div class="mode-info-txt">Timed mock test with review and final scorecard.</div></div>
+            </button>
+        </div>
+    </div>
+
+    <div class="quiz-app hidden" id="quizApp">
+        <header class="quiz-header">
+            <div class="quiz-header-inner">
+                <button class="hdr-btn" onclick="openPalette()"><i class="fas fa-th-large"></i></button>
+                <div class="hdr-brand">Parliament Part-3 (Lecture 15)</div>
+                <div class="hdr-timer"><i class="fas fa-stopwatch"></i> <span id="timerText">00:00</span></div>
+            </div>
+        </header>
+
+        <main class="quiz-main" id="quizMain"></main>
+
+        <nav class="quiz-nav" id="quizNav">
+            <div class="quiz-nav-inner">
+                <button class="nav-btn prev" id="prevBtn" onclick="prevQuestion()"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="nav-btn submit" onclick="openSubmitModal()"><i class="fas fa-paper-plane"></i> Submit</button>
+                <button class="nav-btn next" id="nextBtn" onclick="nextQuestion()"><span id="nextLabel">Next</span> <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </nav>
+    </div>
+
+    <div class="palette-overlay" id="paletteOverlay" onclick="closePalette()"></div>
+    <aside class="palette-drawer" id="paletteDrawer">
+        <div class="pal-head"><span>Questions</span><button onclick="closePalette()"><i class="fas fa-times"></i></button></div>
+        <div class="pal-grid" id="paletteGrid"></div>
+    </aside>
+
+    <div class="modal-overlay" id="submitModal">
+        <div class="modal-box">
+            <h3>Submit Test?</h3>
+            <div class="modal-stats-grid">
+                <div class="modal-stat"><div class="modal-stat-num" id="modalAttempted" style="color:var(--green)">0</div><div>Attempted</div></div>
+                <div class="modal-stat"><div class="modal-stat-num" id="modalUnattempted" style="color:var(--text-muted)">0</div><div>Unattempted</div></div>
+            </div>
+            <button class="modal-btn confirm" onclick="confirmSubmit()">Yes, Finish</button>
+            <button class="modal-btn cancel" onclick="closeSubmitModal()">Resume</button>
+        </div>
+    </div>
+
+    <div class="results-screen" id="resultsScreen"><div class="results-box" id="resultsInner"></div></div>
+    <div class="toast" id="toast"><span id="toastText"></span></div>
+
+    <script>
+        const QUESTIONS = [
+            {
+                e: "Article ________ restricts discussion on the conduct of Judges in Parliament.",
+                h: "संविधान का अनुच्छेद ________ संसद में न्यायाधीशों के आचरण पर चर्चा को प्रतिबंधित करता है।",
+                oEn: ["Article 119", "Article 120", "Article 121", "Article 122"],
+                oHi: ["अनुच्छेद 119", "अनुच्छेद 120", "अनुच्छेद 121", "अनुच्छेद 122"],
+                a: 2,
+                sE: "Under Article 121, no discussion shall take place in Parliament with respect to the conduct of any Judge of the Supreme Court or of a High Court in the discharge of his duties, except upon a motion for presenting an address to the President praying for the removal of the judge.",
+                sH: "अनुच्छेद 121 के तहत उच्चतम न्यायालय या उच्च न्यायालय के किसी न्यायाधीश के आचरण पर संसद में महाभियोग प्रस्ताव के अलावा किसी अन्य समय चर्चा नहीं की जा सकती।"
+            },
+            {
+                e: "Article ________ explicitly states that courts cannot question the validity of Parliamentary proceedings.",
+                h: "अनुच्छेद ________ स्पष्ट रूप से कहता है कि न्यायालय संसदीय कार्यवाहियों की वैधता पर प्रश्न नहीं उठा सकते।",
+                oEn: ["Article 120", "Article 121", "Article 122", "Article 123"],
+                oHi: ["अनुच्छेद 120", "अनुच्छेद 121", "अनुच्छेद 122", "अनुच्छेद 123"],
+                a: 2,
+                sE: "Article 122(1) establishes that the validity of any proceedings in Parliament shall not be called in question on the ground of any alleged irregularity of procedure.",
+                sH: "अनुच्छेद 122(1) के अनुसार प्रक्रिया की किसी कथित अनियमितता के आधार पर संसद की किसी कार्यवाही की विधिमान्यता की जांच किसी न्यायालय द्वारा नहीं की जाएगी।"
+            },
+            {
+                e: "Article 120 of the Indian Constitution relates to which of the following?",
+                h: "भारतीय संविधान का अनुच्छेद 120 निम्नलिखित में से किससे संबंधित है?",
+                oEn: ["Powers of the Judiciary", "Language to be used in Parliament", "Removal of Judges", "Parliamentary privileges"],
+                oHi: ["न्यायपालिका की शक्तियां", "संसद में प्रयोग की जाने वाली भाषा", "न्यायाधीशों को हटाना", "संसदीय विशेषाधिकार"],
+                a: 1,
+                sE: "Article 120 governs the language to be used in Parliament (Hindi or English), and empowers the Presiding Officer to permit a member to address the House in their mother tongue.",
+                sH: "अनुच्छेद 120 संसद में कार्य संचालन हेतु भाषा (हिंदी या अंग्रेजी) और सदस्यों द्वारा अपनी मातृभाषा में बोलने की अनुमति से संबंधित है।"
+            },
+            {
+                e: "What is the meaning of \"residuary powers\" under the Indian Constitution?",
+                h: "भारतीय संविधान के अंतर्गत \"अवशिष्ट शक्तियों\" का क्या अर्थ है?",
+                oEn: [
+                    "Powers only given to states",
+                    "Powers only to judiciary",
+                    "Powers not mentioned in any list, vested in Parliament",
+                    "All powers to Union Territories"
+                ],
+                oHi: [
+                    "केवल राज्यों को दी गई शक्तियां",
+                    "केवल न्यायपालिका को शक्तियां",
+                    "किसी भी सूची में उल्लिखित नहीं की गई शक्तियां, जो संसद में निहित हैं",
+                    "सभी शक्तियां केंद्र शासित प्रदेशों को"
+                ],
+                a: 2,
+                sE: "Under Article 248 and Entry 97 of List I, Parliament has exclusive power to make any law with respect to any matter not enumerated in the Concurrent List or State List.",
+                sH: "अनुच्छेद 248 के अनुसार जो विषय संघ, राज्य या समवर्ती सूची में नहीं हैं, उन पर कानून बनाने का अनन्य अधिकार संसद को है।"
+            },
+            {
+                e: "In India, The Annual Financial Statement is generally implemented for the period ________.",
+                h: "भारत में, वार्षिक वित्तीय विवरण आमतौर पर ________ अवधि के लिए लागू किया जाता है।",
+                oEn: ["1st April to 30th September", "1st April to 31st March", "1st January to 31st December", "1st July to 30th June"],
+                oHi: ["1 अप्रैल से 30 सितंबर", "1 अप्रैल से 31 मार्च", "1 जनवरी से 31 दिसंबर", "1 जुलाई से 30 जून"],
+                a: 1,
+                sE: "The Indian financial year runs from 1st April to 31st March of the following year.",
+                sH: "भारत में वित्तीय वर्ष 1 अप्रैल से 31 मार्च तक चलता है।"
+            },
+            {
+                e: "Article 368 empowers Parliament to amend the Constitution. Which statement best explains the limitations imposed on this power based on landmark Supreme Court judgments?",
+                h: "अनुच्छेद 368 संसद को संविधान संशोधित करने की शक्ति देता है। सर्वोच्च न्यायालय के ऐतिहासिक निर्णयों द्वारा इस पर लगाई गई सीमाओं को कौन सा कथन सर्वोत्तम रूप से स्पष्ट करता है?",
+                oEn: [
+                    "Parliament can amend any part of the Constitution including Fundamental Rights without restrictions.",
+                    "Parliament cannot amend the basic structure or framework of the Constitution as held in the Kesavananda Bharati case.",
+                    "The power to amend is absolute and subject only to Presidential assent.",
+                    "Amendments require ratification by all State Legislatures regardless of their subject matter."
+                ],
+                oHi: [
+                    "संसद संविधान के किसी भी भाग में बिना किसी प्रतिबंध के संशोधन कर सकती है।",
+                    "संसद संविधान के मूल ढांचे (Basic Structure) को संशोधित नहीं कर सकती जैसा कि केशवानंद भारती मामले में घोषित किया गया।",
+                    "संशोधन की शक्ति पूर्ण है और केवल राष्ट्रपति की स्वीकृति के अधीन है।",
+                    "संशोधनों को सभी राज्य विधानसभाओं से अनुमोदित कराना आवश्यक है।"
+                ],
+                a: 1,
+                sE: "The Supreme Court in the Kesavananda Bharati case (1973) propounded the Basic Structure Doctrine, ruling that Parliament's constituent power under Article 368 cannot damage or destroy the essential framework of the Constitution.",
+                sH: "1973 के केशवानंद भारती मामले में यह स्पष्ट किया गया कि संसद संविधान के मूल ढांचे (बुनियादी विशेषताओं) को नष्ट या संशोधित नहीं कर सकती।"
+            },
+            {
+                e: "Which of the following statements correctly distinguishes a Money Bill from a Finance Bill in light of constitutional provisions and judicial interpretations?",
+                h: "संवैधानिक प्रावधानों और न्यायिक व्याख्याओं के आलोक में धन विधेयक और वित्त विधेयक के बीच कौन सा कथन सही अंतर स्पष्ट करता है?",
+                oEn: [
+                    "All Finance Bills are Money Bills, but not all Money Bills are Finance Bills.",
+                    "A Money Bill can be introduced in either House, whereas a Finance Bill only in Lok Sabha.",
+                    "The Speaker's decision on whether a bill is a Money Bill is subject to judicial review after the K.S. Puttaswamy v. Union of India (2018) verdict.",
+                    "A Finance Bill deals exclusively with taxation matters listed under Article 110."
+                ],
+                oHi: [
+                    "सभी वित्त विधेयक धन विधेयक होते हैं, किंतु सभी धन विधेयक वित्त विधेयक नहीं होते।",
+                    "धन विधेयक किसी भी सदन में पेश हो सकता है, जबकि वित्त विधेयक केवल लोकसभा में।",
+                    "के.एस. पुट्टास्वामी बनाम भारत संघ (2018) निर्णय के बाद स्पीकर का धन विधेयक प्रमाणन निर्णय न्यायिक समीक्षा के अधीन है।",
+                    "वित्त विधेयक केवल अनुच्छेद 110 के कर मामलों से संबंधित होता है।"
+                ],
+                a: 2,
+                sE: "All Money Bills are financial bills, but not all financial bills are Money Bills. Furthermore, in the K.S. Puttaswamy (Aadhaar, 2018) judgment, the Supreme Court ruled that the Speaker’s certification of a bill as a Money Bill is open to judicial review.",
+                sH: "पुट्टास्वामी (आधार वाद, 2018) के फैसले में उच्चतम न्यायालय ने स्पष्ट किया कि लोकसभा अध्यक्ष द्वारा किसी विधेयक को धन विधेयक प्रमाणित करने का निर्णय न्यायिक समीक्षा के दायरे में आता है।"
+            },
+            {
+                e: "When a non-minister proposes a bill, it is called:",
+                h: "जब कोई ऐसा व्यक्ति जो मंत्री नहीं है, कोई विधेयक प्रस्तावित करता है, तो उसे क्या कहा जाता है?",
+                oEn: ["Money Bill", "Government Bill", "Private Member's Bill", "Non-Money Bill"],
+                oHi: ["धन विधेयक", "सरकारी विधेयक", "निजी सदस्य विधेयक (Private Member's Bill)", "गैर-धन विधेयक"],
+                a: 2,
+                sE: "Any bill introduced by a Member of Parliament who is not a member of the Council of Ministers is classified as a Private Member's Bill.",
+                sH: "मंत्री के अलावा संसद के किसी भी अन्य सदस्य द्वारा पेश किए जाने वाले विधेयक को 'गैर-सरकारी सदस्य का विधेयक' या 'निजी विधेयक' कहा जाता है।"
+            },
+            {
+                e: "In India, Council of States (Rajya Sabha) has equal powers with the House of the People (Lok Sabha) in ______.",
+                h: "भारत में, राज्य सभा को ______ में लोक सभा के समान शक्तियां प्राप्त हैं।",
+                oEn: ["Money Bills", "Constitutional Amendment Bills", "No-Confidence Motions", "Election of President"],
+                oHi: ["धन विधेयक पारित करने", "संविधान संशोधन विधेयक पारित करने", "अविश्वास प्रस्ताव", "राष्ट्रपति का निर्वाचन"],
+                a: 1,
+                sE: "A Constitutional Amendment Bill under Article 368 must be passed by both Houses of Parliament separately by a two-thirds majority of members present and voting. There is no joint sitting for amendment bills, giving both Houses equal standing.",
+                sH: "संविधान संशोधन विधेयक (अनुच्छेद 368) के मामले में दोनों सदनों को समान अधिकार प्राप्त हैं और दोनों सदनों में इसे अलग-अलग विशेष बहुमत से पारित होना अनिवार्य है।"
+            },
+            {
+                e: "A bill passed by both houses becomes law after:",
+                h: "दोनों सदनों द्वारा पारित विधेयक किसके बाद कानून बनता है?",
+                oEn: ["Supreme Court approval", "Lok Sabha approval", "Prime Minister's approval", "President's assent"],
+                oHi: ["उच्चतम न्यायालय की स्वीकृति", "लोकसभा की स्वीकृति", "प्रधानमंत्री की स्वीकृति", "राष्ट्रपति की सहमति (President's assent)"],
+                a: 3,
+                sE: "Under Article 111, when a Bill has been passed by the Houses of Parliament, it is presented to the President, and becomes an Act only after the President gives assent.",
+                sH: "अनुच्छेद 111 के अनुसार संसद के दोनों सदनों से पारित विधेयक राष्ट्रपति के हस्ताक्षर/सहमति के पश्चात ही कानून (अधिनियम) का रूप लेता है।"
+            },
+            {
+                e: "The Committee on Government Assurances primarily deals with ______ .",
+                h: "सरकारी आश्वासनों संबंधी समिति मुख्य रूप से किससे संबंधित है?",
+                oEn: [
+                    "Promises and undertakings made by Ministers in Parliament",
+                    "Monitoring of government expenditure in Parliament",
+                    "Examining Rules under Article 312",
+                    "Policy review of public enterprises"
+                ],
+                oHi: [
+                    "संसद में मंत्रियों द्वारा किए गए वादों और वचनों से",
+                    "संसद में सरकारी व्यय की निगरानी से",
+                    "अनुच्छेद 312 के तहत नियमों के परीक्षण से",
+                    "सार्वजनिक उद्यमों की नीति समीक्षा से"
+                ],
+                a: 0,
+                sE: "The Committee on Government Assurances scrutinizes the promises, assurances, and undertakings given by ministers from time to time on the floor of the House.",
+                sH: "यह समिति सदन में मंत्रियों द्वारा दिए गए विभिन्न आश्वासनों और वादों के क्रियान्वयन की प्रगति की जांच करती है।"
+            },
+            {
+                e: "Which Article of the Indian Constitution provides provisions as to the introduction and passing of legislative Bills?",
+                h: "भारतीय संविधान का कौन सा अनुच्छेद संसद में विधेयकों के पुरःस्थापन और पारित किए जाने के संबंध में उपबंध प्रदान करता है?",
+                oEn: ["Article 101", "Article 105", "Article 107", "Article 103"],
+                oHi: ["अनुच्छेद 101", "अनुच्छेद 105", "अनुच्छेद 107", "अनुच्छेद 103"],
+                a: 2,
+                sE: "Article 107 of the Constitution of India deals with provisions as to the introduction and passing of legislative Bills.",
+                sH: "अनुच्छेद 107 साधारण विधेयकों को संसद के सदनों में पेश करने और पारित करने की सामान्य प्रक्रिया का वर्णन करता है।"
+            },
+            {
+                e: "What is the primary function of the Public Accounts Committee (PAC) of the Indian Parliament?",
+                h: "भारतीय संसद की लोक लेखा समिति (PAC) का प्राथमिक कार्य क्या है?",
+                oEn: [
+                    "To review CAG audit reports",
+                    "To evaluate government schemes",
+                    "To recommend the Union Budget",
+                    "To assist in the election of the Speaker"
+                ],
+                oHi: [
+                    "CAG की ऑडिट रिपोर्ट की समीक्षा करना",
+                    "सरकारी योजनाओं का मूल्यांकन करना",
+                    "केंद्रीय बजट की सिफारिश करना",
+                    "अध्यक्ष के चुनाव में सहायता करना"
+                ],
+                a: 0,
+                sE: "The Public Accounts Committee examines the reports of the Comptroller and Auditor General (CAG) of India on the accounts and finances of the Union.",
+                sH: "लोक लेखा समिति का मुख्य कार्य नियंत्रक एवं महालेखा परीक्षक (CAG) द्वारा प्रस्तुत वित्तीय प्रतिवेदनों की गहन जांच करना है।"
+            },
+            {
+                e: "Which Article of the Indian Constitution defines the Money Bill?",
+                h: "भारतीय संविधान का कौन सा अनुच्छेद धन विधेयक को परिभाषित करता है?",
+                oEn: ["Article 112", "Article 110", "Article 117", "Article 105"],
+                oHi: ["अनुच्छेद 112", "अनुच्छेद 110", "अनुच्छेद 117", "अनुच्छेद 105"],
+                a: 1,
+                sE: "Article 110 of the Indian Constitution defines a Money Bill.",
+                sH: "संविधान का अनुच्छेद 110 धन विधेयक की परिभाषा और उसके घटकों को निर्दिष्ट करता है।"
+            },
+            {
+                e: "The Annual Financial Statement, presented as a part of the budget, is covered under which Article of the Constitution of India?",
+                h: "बजट के हिस्से के रूप में प्रस्तुत वार्षिक वित्तीय विवरण संविधान के किस अनुच्छेद के अंतर्गत आता है?",
+                oEn: ["Article 115", "Article 114", "Article 112", "Article 113"],
+                oHi: ["अनुच्छेद 115", "अनुच्छेद 114", "अनुच्छेद 112", "अनुच्छेद 113"],
+                a: 2,
+                sE: "Under Article 112, the President causes to be laid before both Houses of Parliament the Annual Financial Statement for each financial year.",
+                sH: "अनुच्छेद 112 के अनुसार केंद्र सरकार का वार्षिक बजट 'वार्षिक वित्तीय विवरण' के रूप में संसद के समक्ष रखा जाता है।"
+            },
+            {
+                e: "Who elects the members of the Estimates Committee in the Indian Parliament?",
+                h: "भारतीय संसद में प्राक्कलन समिति के सदस्यों का चुनाव कौन करता है?",
+                oEn: ["Members of the Lok Sabha", "Prime Minister", "Members of the Rajya Sabha", "President of India"],
+                oHi: ["लोकसभा के सदस्य", "प्रधानमंत्री", "राज्यसभा के सदस्य", "भारत के राष्ट्रपति"],
+                a: 0,
+                sE: "The Estimates Committee consists of 30 members elected every year exclusively by the Lok Sabha from amongst its own members through proportional representation.",
+                sH: "प्राक्कलन समिति में 30 सदस्य होते हैं और वे सभी केवल लोकसभा सदस्यों द्वारा अपने में से निर्वाचित किए जाते हैं।"
+            },
+            {
+                e: "Which type of legislative bills must be introduced in the Lok Sabha only after obtaining the prior approval of the President of India?",
+                h: "किस प्रकार के विधायी विधेयक लोकसभा में केवल भारत के राष्ट्रपति की पूर्व स्वीकृति प्राप्त करने के बाद ही पेश किए जा सकते हैं?",
+                oEn: ["Private Bills", "Ordinary Bills", "Public Bills", "Money Bills"],
+                oHi: ["निजी विधेयक", "साधारण विधेयक", "सार्वजनिक विधेयक", "धन विधेयक (Money Bills)"],
+                a: 3,
+                sE: "Under Article 117(1), a Money Bill or financial bill containing matters under Article 110 cannot be introduced without the prior recommendation of the President.",
+                sH: "अनुच्छेद 117(1) के तहत धन विधेयक को पेश करने से पहले राष्ट्रपति की पूर्व अनुशंसा अनिवार्य होती है।"
+            },
+            {
+                e: "Which option correctly describes the Indian President’s power to summon the Parliament?",
+                h: "निम्नलिखित में से कौन सा विकल्प भारतीय राष्ट्रपति की संसद को बुलाने की शक्ति का सही वर्णन करता है?",
+                oEn: [
+                    "The President may summon the Parliament only once every calendar year.",
+                    "The President may summon the Parliament at least twice a year.",
+                    "The President can only summon the Parliament after consulting the Prime Minister personally.",
+                    "The President may summon the Parliament at his/her discretion with no statutory minimum frequency."
+                ],
+                oHi: [
+                    "राष्ट्रपति संसद को वर्ष में केवल एक बार बुला सकते हैं।",
+                    "राष्ट्रपति संसद को वर्ष में कम से कम दो बार बुलाते हैं (दो सत्रों में 6 माह से अधिक अंतर नहीं)।",
+                    "राष्ट्रपति केवल प्रधानमंत्री से व्यक्तिगत परामर्श के बाद ही बुला सकते हैं।",
+                    "राष्ट्रपति बिना किसी न्यूनतम आवृत्ति के बुला सकते हैं।"
+                ],
+                a: 1,
+                sE: "Article 85 mandates that the gap between the last sitting in one session and the date of the first sitting in the next session shall not exceed six months, ensuring Parliament is summoned at least twice each year.",
+                sH: "अनुच्छेद 85 के तहत संसद के दो सत्रों के बीच अधिकतम 6 माह का अंतर हो सकता है, इसलिए वर्ष में कम से कम दो बार सत्र आयोजित होना आवश्यक है।"
+            },
+            {
+                e: "For which of the given bills can the President of India summon a joint sitting of both Houses of Parliament?\n1. Ordinary Bill\n2. Money Bill\n3. Constitutional Amendment Bill",
+                h: "राष्ट्रपति संसद के दोनों सदनों की संयुक्त बैठक किस विधेयक के लिए बुला सकते हैं?\n1. साधारण विधेयक\n2. धन विधेयक\n3. संविधान संशोधन विधेयक",
+                oEn: ["1 and 2 only", "1, 2 and 3", "1 only", "2 and 3 only"],
+                oHi: ["केवल 1 और 2", "1, 2 और 3", "केवल 1 (साधारण विधेयक)", "केवल 2 और 3"],
+                a: 2,
+                sE: "Article 108 applies to ordinary bills and financial bills. Joint sittings cannot be held for Money Bills (Article 109 gives Lok Sabha the final say) or Constitutional Amendment Bills (Article 368 requires separate passage).",
+                sH: "संयुक्त बैठक केवल साधारण विधेयकों पर गतिरोध दूर करने के लिए बुलाई जा सकती है; धन विधेयक और संविधान संशोधन विधेयक पर संयुक्त बैठक का कोई प्रावधान नहीं है।"
+            },
+            {
+                e: "Which of the following is NOT an official component of the Union Finance Budget?",
+                h: "वित्तीय बजट का कौन सा घटक नहीं है?",
+                oEn: ["Memorandum expelling grants", "Appropriation bill", "Finance bill", "Receipts budget"],
+                oHi: ["अनुदानों को निष्कासित करने वाला स्मरण पत्र", "विनियोग विधेयक", "वित्त विधेयक", "प्राप्ति बजट"],
+                a: 0,
+                sE: "The budget consists of the Annual Financial Statement, Demands for Grants, Appropriation Bill, Finance Bill, and Receipts/Expenditure profiles. 'Memorandum expelling grants' is fictitious.",
+                sH: "बजट में विनियोग विधेयक, वित्त विधेयक और प्राप्ति बजट शामिल होते हैं; 'अनुदानों को निष्कासित करने वाला स्मरण पत्र' कोई घटक नहीं होता।"
+            },
+            {
+                e: "Which Article of the Constitution of India provides provisions for a joint sitting of both Houses of Parliament?",
+                h: "संविधान का कौन सा अनुच्छेद संसद के दोनों सदनों की संयुक्त बैठक के लिए प्रावधान प्रदान करता है?",
+                oEn: ["Article 164", "Article 118", "Article 129", "Article 108"],
+                oHi: ["अनुच्छेद 164", "अनुच्छेद 118", "अनुच्छेद 129", "अनुच्छेद 108"],
+                a: 3,
+                sE: "Article 108 of the Constitution of India details the procedure for a Joint Sitting of both Houses to resolve legislative disagreements.",
+                sH: "अनुच्छेद 108 में दोनों सदनों के बीच किसी विधेयक पर गतिरोध समाप्त करने हेतु संयुक्त बैठक का उपबंध है।"
+            },
+            {
+                e: "Who among the following can propose a Government Bill?",
+                h: "सरकारी विधेयक को कौन प्रस्तावित कर सकता है?",
+                oEn: [
+                    "Member of the Treasury Bench in Lok Sabha",
+                    "A Member of Parliament who is not a Minister",
+                    "Minister in either House of Parliament",
+                    "Minister in Lok Sabha only"
+                ],
+                oHi: [
+                    "लोकसभा में ट्रेजरी बेंच के सदस्य",
+                    "संसद का सदस्य जो मंत्री नहीं है",
+                    "संसद के किसी भी सदन में मंत्री",
+                    "केवल लोकसभा में मंत्री"
+                ],
+                a: 2,
+                sE: "A Government Bill (Public Bill) can be introduced by any minister, whether they are a member of the Lok Sabha or the Rajya Sabha.",
+                sH: "सरकारी विधेयक संसद के किसी भी सदन (लोकसभा या राज्यसभा) का कोई भी केंद्रीय मंत्री पेश कर सकता है।"
+            },
+            {
+                e: "Which of the following bills provides details on the imposition, abolition, or regulation of taxes proposed in the budget?",
+                h: "निम्नलिखित में से कौन सा विधेयक बजट में प्रस्तावित करों के अधिरोपण, उन्मूलन या विनियमन पर विवरण प्रदान करता है?",
+                oEn: ["Finance bill", "Private member bill", "Constitution amendment bill", "Ordinary bill"],
+                oHi: ["वित्त विधेयक (Finance bill)", "निजी सदस्य विधेयक", "संविधान संशोधन विधेयक", "साधारण विधेयक"],
+                a: 0,
+                sE: "The Finance Bill is introduced annually to give effect to the taxation and fiscal proposals of the Government for the upcoming financial year.",
+                sH: "वित्त विधेयक बजट में प्रस्तावित नए कर लगाने, करों में छूट या संशोधन करने के कानूनी प्रावधानों को लागू करने के लिए पेश किया जाता है।"
+            },
+            {
+                e: "Who decides whether a bill is a Money Bill or not?",
+                h: "कौन तय करता है कि कोई विधेयक धन विधेयक है या नहीं?",
+                oEn: ["President", "Speaker of the House of the People", "Prime Minister", "Finance Minister"],
+                oHi: ["राष्ट्रपति", "लोकसभा अध्यक्ष (Speaker)", "प्रधानमंत्री", "वित्त मंत्री"],
+                a: 1,
+                sE: "Under Article 110(3), if any question arises whether a Bill is a Money Bill or not, the decision of the Speaker of the Lok Sabha thereon is final.",
+                sH: "अनुच्छेद 110(3) के अनुसार किसी विधेयक के धन विधेयक होने का अंतिम निर्णय लोकसभा अध्यक्ष करता है।"
+            },
+            {
+                e: "Arrange the following steps in the correct legislative process for the passage of a Money Bill in India:\nA) Introduction of Money Bill in Lok Sabha\nB) Passage in Lok Sabha\nC) Transmission to Rajya Sabha\nD) Presentation for President's assent",
+                h: "भारत में धन विधेयक पारित करने की सही विधायी प्रक्रिया में चरणों को व्यवस्थित कीजिए:\nA) लोकसभा में धन विधेयक का प्रस्तुतीकरण\nB) लोकसभा में पारित होना\nC) राज्यसभा में प्रेषण\nD) राष्ट्रपति की स्वीकृति के लिए प्रस्तुत करना",
+                oEn: ["A-B-C-D", "A-C-B-D", "B-C-A-D", "C-B-A-D"],
+                oHi: ["A-B-C-D", "A-C-B-D", "B-C-A-D", "C-B-A-D"],
+                a: 0,
+                sE: "A Money Bill is introduced in the Lok Sabha on the President's recommendation (A), passed by the Lok Sabha (B), transmitted to the Rajya Sabha for recommendations within 14 days (C), and then presented to the President for assent (D).",
+                sH: "धन विधेयक पहले लोकसभा में पेश होता है (A), वहाँ से पास होकर (B), राज्यसभा में 14 दिनों के लिए जाता है (C), और फिर राष्ट्रपति की स्वीकृति हेतु भेजा जाता है (D)।"
+            },
+            {
+                e: "How are Money Bills handled in both Houses of Parliament and State Legislatures with bicameralism under the Constitution?",
+                h: "संविधान के अंतर्गत संसद के दोनों सदनों और द्विसदनीय राज्य विधानमंडलों में धन विधेयकों को किस प्रकार निपटाया जाता है?",
+                oEn: [
+                    "Rajya Sabha must approve Money Bills within 14 days.",
+                    "In States, the Legislative Council can amend a Money Bill within 14 days.",
+                    "Both Rajya Sabha and Legislative Councils have equal powers on Money Bills.",
+                    "Rajya Sabha and Legislative Councils can only make recommendations within 14 days."
+                ],
+                oHi: [
+                    "राज्यसभा को 14 दिनों में धन विधेयक मंजूर करना ही होता है।",
+                    "राज्यों में विधान परिषद 14 दिनों में धन विधेयक में संशोधन कर सकती है।",
+                    "धन विधेयक पर दोनों सदनों को समान अधिकार प्राप्त हैं।",
+                    "राज्यसभा और विधान परिषदें केवल 14 दिनों के भीतर सिफारिशें कर सकती हैं।"
+                ],
+                a: 3,
+                sE: "Under Articles 109 and 198, the Upper House (Rajya Sabha / Legislative Council) has strictly limited powers regarding Money Bills and can only return them with recommendations within 14 days, which the Lower House can accept or reject.",
+                sH: "अनुच्छेद 109 और 198 के अनुसार राज्यसभा और विधान परिषद धन विधेयक को अस्वीकार या संशोधित नहीं कर सकतीं, केवल 14 दिनों में अपनी सिफारिशें भेज सकती हैं।"
+            },
+            {
+                e: "There are different types of Bills introduced in the Lok Sabha. Which of the following is NOT an official type?",
+                h: "लोकसभा में पेश किए जाने वाले विधेयकों में से कौन सा एक प्रकार नहीं है?",
+                oEn: ["Revenue Bill", "Financial Bills", "Money Bills", "Ordinary Bills"],
+                oHi: ["राजस्व विधेयक (Revenue Bill)", "वित्तीय विधेयक", "धन विधेयक", "साधारण विधेयक"],
+                a: 0,
+                sE: "The Constitution explicitly recognizes Ordinary Bills, Money Bills, Financial Bills (Types I and II), and Constitution Amendment Bills. 'Revenue Bill' is not a separate constitutional classification.",
+                sH: "संसदीय वर्गीकरण में साधारण विधेयक, धन विधेयक, वित्त विधेयक और संविधान संशोधन विधेयक होते हैं; 'राजस्व विधेयक' कोई अलग प्रकार नहीं है।"
+            },
+            {
+                e: "After passing a Money Bill in the Lok Sabha, the Rajya Sabha can return the bill to the Lok Sabha within a maximum of ______ days.",
+                h: "लोकसभा में धन विधेयक पारित होने के बाद, राज्यसभा अधिकतम कितने दिनों के भीतर विधेयक को लोकसभा को वापस भेज सकती है?",
+                oEn: ["28", "14", "22", "12"],
+                oHi: ["28", "14", "22", "12"],
+                a: 1,
+                sE: "Under Article 109(2), the Rajya Sabha must return the Money Bill within 14 days with or without its recommendations.",
+                sH: "अनुच्छेद 109(2) के तहत राज्यसभा को धन विधेयक 14 दिनों के भीतर लोकसभा को वापस भेजना अनिवार्य होता है।"
+            }
+        ];
+
+        const state = {
+            current: 0,
+            answers: new Array(QUESTIONS.length).fill(null),
+            locked: new Array(QUESTIONS.length).fill(false),
+            mode: 'test',
+            lang: 'en',
+            startTime: null,
+            timerInterval: null,
+            elapsed: 0
+        };
+
+        function $(id) { return document.getElementById(id); }
+
+        function toast(msg) {
+            const t = $('toast');
+            $('toastText').textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        function formatTime(s) {
+            const m = Math.floor(s / 60);
+            return String(m).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+        }
+
+        function startApp(mode) {
+            state.mode = mode;
+            $('startScreen').classList.add('hidden');
+            $('quizApp').classList.remove('hidden');
+            state.startTime = Date.now();
+            state.timerInterval = setInterval(() => {
+                state.elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+                $('timerText').textContent = formatTime(state.elapsed);
+            }, 1000);
+            renderQuestion();
+            buildPalette();
+        }
+
+        function toggleLang() {
+            state.lang = state.lang === 'en' ? 'hi' : 'en';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const i = state.current;
+            const q = QUESTIONS[i];
+            const isQuiz = state.mode === 'quiz';
+            const locked = state.locked[i];
+            const userAns = state.answers[i];
+            const qTxt = state.lang === 'en' ? q.e : q.h;
+            const opts = state.lang === 'en' ? q.oEn : q.oHi;
+
+            let optsHtml = '';
+            opts.forEach((opt, idx) => {
+                let cls = '', tag = '';
+                if (isQuiz && locked) {
+                    if (idx === q.a) {
+                        cls = 'correct';
+                        tag = '<span class="opt-tag">Correct</span>';
+                    }
+                    if (userAns === idx && idx !== q.a) {
+                        cls = 'wrong';
+                        tag = '<span class="opt-tag">Your Ans</span>';
+                    }
+                } else if (userAns === idx) {
+                    cls = 'selected';
+                }
+                optsHtml += `
+                    <div class="opt ${cls} ${locked ? 'locked' : ''}" onclick="selectOption(${idx})">
+                        <div class="opt-letter">${String.fromCharCode(65 + idx)}</div>
+                        <div class="opt-text">${opt}</div>
+                        ${tag}
+                    </div>
+                `;
+            });
+
+            const solTxt = state.lang === 'en' ? q.sE : q.sH;
+            let solHtml = (isQuiz && locked) ? `
+                <div class="sol-box">
+                    <div class="sol-head"><i class="fas fa-lightbulb"></i> Explanation</div>
+                    <div style="white-space: pre-line;">${solTxt}</div>
+                </div>
+            ` : '';
+
+            $('quizMain').innerHTML = `
+                <div class="q-card">
+                    <div class="q-top">
+                        <div class="q-num-badge">Question ${i + 1} of ${QUESTIONS.length}</div>
+                        <button class="lang-btn" onclick="toggleLang()">
+                            <i class="fas fa-language"></i> ${state.lang === 'en' ? 'Switch to हिन्दी' : 'Switch to English'}
+                        </button>
+                    </div>
+                    <div class="q-text">${qTxt}</div>
+                    <div class="opts">${optsHtml}</div>
+                    ${solHtml}
+                </div>
+            `;
+
+            $('prevBtn').disabled = i === 0;
+            $('nextLabel').textContent = i === QUESTIONS.length - 1 ? 'Finish' : 'Next';
+            updatePaletteGrid();
+        }
+
+        function selectOption(idx) {
+            if (state.mode === 'quiz' && state.locked[state.current]) return;
+            state.answers[state.current] = idx;
+            if (state.mode === 'quiz') {
+                state.locked[state.current] = true;
+                if (idx === QUESTIONS[state.current].a) {
+                    toast('Correct! 🎉');
+                } else {
+                    toast('Incorrect');
+                }
+            }
+            renderQuestion();
+        }
+
+        function prevQuestion() {
+            if (state.current > 0) {
+                state.current--;
+                renderQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (state.current < QUESTIONS.length - 1) {
+                state.current++;
+                renderQuestion();
+            } else {
+                openSubmitModal();
+            }
+        }
+
+        function buildPalette() {
+            const grid = $('paletteGrid');
+            grid.innerHTML = '';
+            QUESTIONS.forEach((_, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'pal-btn';
+                btn.id = 'pal-' + i;
+                btn.textContent = i + 1;
+                btn.onclick = () => {
+                    state.current = i;
+                    closePalette();
+                    renderQuestion();
+                };
+                grid.appendChild(btn);
+            });
+            updatePaletteGrid();
+        }
+
+        function updatePaletteGrid() {
+            QUESTIONS.forEach((_, i) => {
+                const btn = $('pal-' + i);
+                if (!btn) return;
+                btn.className = 'pal-btn';
+                if (i === state.current) btn.classList.add('current');
+                if (state.answers[i] !== null) btn.classList.add('answered');
+            });
+        }
+
+        function openPalette() {
+            $('paletteDrawer').classList.add('open');
+            $('paletteOverlay').classList.add('open');
+        }
+
+        function closePalette() {
+            $('paletteDrawer').classList.remove('open');
+            $('paletteOverlay').classList.remove('open');
+        }
+
+        function openSubmitModal() {
+            const ans = state.answers.filter(a => a !== null).length;
+            $('modalAttempted').textContent = ans;
+            $('modalUnattempted').textContent = QUESTIONS.length - ans;
+            $('submitModal').classList.add('open');
+        }
+
+        function closeSubmitModal() {
+            $('submitModal').classList.remove('open');
+        }
+
+        function confirmSubmit() {
+            closeSubmitModal();
+            if (state.timerInterval) clearInterval(state.timerInterval);
+            let correct = 0, wrong = 0;
+            state.answers.forEach((ans, i) => {
+                if (ans !== null) {
+                    if (ans === QUESTIONS[i].a) correct++;
+                    else wrong++;
+                }
+            });
+            $('resultsInner').innerHTML = `
+                <h2>Test Completed!</h2>
+                <p style="color:var(--text-muted);margin:8px 0;">Total Time: ${formatTime(state.elapsed)}</p>
+                <div class="res-score-card">
+                    <div class="res-score-val">${correct} / ${QUESTIONS.length}</div>
+                    <div>Score</div>
+                </div>
+                <div class="res-grid">
+                    <div class="res-item"><div class="res-item-val" style="color:var(--green)">${correct}</div><div>Correct</div></div>
+                    <div class="res-item"><div class="res-item-val" style="color:var(--red)">${wrong}</div><div>Wrong</div></div>
+                </div>
+                <button class="modal-btn confirm" onclick="location.reload()">Re-attempt</button>
+            `;
+            $('resultsScreen').classList.add('open');
+        }
+    </script>
+</body>
+</html>
